@@ -14,10 +14,10 @@ interface IZKBridge {
     error ZKBridge__WrappedTokenNotSupported(address);
 
     struct Input {
-        uint256 value;
         uint256 root;
-        uint256 nullifierHash;
+        uint256 value;
         address token;
+        uint256 nullifierHash;
         address relayer;
         address recipient;
     }

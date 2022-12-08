@@ -106,7 +106,7 @@ contract CommandGate is
         address contract_,
         bytes memory data_
     ) external whenNotPaused {
-        if (!__isWhitelisted.get(contract_.fillFirst96Bits()))
+        if (!__isWhitelisted.get(contract_.fillLast96Bits()))
             revert CommandGate__UnknownAddress(contract_);
 
         address user = _msgSender();

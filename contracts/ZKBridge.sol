@@ -86,8 +86,8 @@ contract ZKBridge is Base, IZKBridge, FundForwarder {
     }
 
     function deposit(
-        address token_,
         address account_,
+        address token_,
         uint256 value_,
         uint256 commitment_
     ) external onlyRole(Roles.PROXY_ROLE) {
@@ -151,11 +151,11 @@ contract ZKBridge is Base, IZKBridge, FundForwarder {
         bytes calldata proofs_
     ) private view {
         uint256[] memory inputs = new uint256[](7);
-        inputs[0] = fee_;
-        inputs[1] = input_.root;
-        inputs[2] = input_.value;
+        inputs[0] = input_.root;
+        inputs[1] = input_.value;
+        inputs[2] = input_.token.fillLast96Bits();
         inputs[3] = input_.nullifierHash;
-        inputs[4] = input_.token.fillLast96Bits();
+        inputs[4] = fee_;
         inputs[5] = input_.relayer.fillLast96Bits();
         inputs[6] = input_.recipient.fillLast96Bits();
         if (!verifier.verifyProof(proofs_, inputs))

@@ -1,5 +1,6 @@
 import { Contract, ContractFactory } from "ethers";
 import { ethers, upgrades } from "hardhat";
+import { PMToken } from "../typechain-types";
 const { poseidonContract } = require("circomlibjs");
 
 async function main() {
@@ -28,16 +29,16 @@ async function main() {
     // );
 
     // const CommandGate: ContractFactory = await ethers.getContractFactory("CommandGate");
-    // const commandGate: Contract = await CommandGate.deploy(authority.address, treasury.address);
+    // const commandGate: Contract = await CommandGate.deploy(process.env.BSC_AUTHORITY, process.env.BSC_TREASURY);
     // await commandGate.deployed();
 
     // console.log(`CommandGate is deployed to: ${commandGate.address}`);
 
-    const Verifier: ContractFactory = await ethers.getContractFactory("PlonkVerifier");
-    const verifier: Contract = await Verifier.deploy();
-    await verifier.deployed();
+    // const Verifier: ContractFactory = await ethers.getContractFactory("PlonkVerifier");
+    // const verifier: Contract = await Verifier.deploy();
+    // await verifier.deployed();
 
-    console.log(`Verifier deployed to: ${verifier.address}`);
+    // console.log(`Verifier deployed to: ${verifier.address}`);
 
     // const poseidonT3ABI = poseidonContract.generateABI(2);
     // const poseidonT3Bytecode = poseidonContract.createCode(2);
@@ -48,20 +49,20 @@ async function main() {
 
     // console.log(`PoseidonT3 library has been deployed to: ${poseidon.address}`);
 
-    // const ZKBridge: ContractFactory = await ethers.getContractFactory("ZKBridge", {
-    //     libraries: { PoseidonT3: poseidon.address },
-    // });
+    const ZKBridge: ContractFactory = await ethers.getContractFactory("ZKBridge", {
+        libraries: { PoseidonT3: process.env.BSC_POSEIDON },
+    });
 
-    // const zkBridge: Contract = await ZKBridge.deploy(
-    //     "21663839004416932945382355908790599225266501822907911457504978515578255421292",
-    //     20,
-    //     treasury.address,
-    //     authority.address,
-    //     verifier.address,
-    // );
-    // await zkBridge.deployed()
+    const zkBridge: Contract = await ZKBridge.deploy(
+        "21663839004416932945382355908790599225266501822907911457504978515578255421292",
+        20,
+        process.env.BSC_TREASURY,
+        process.env.BSC_AUTHORITY,
+        process.env.BSC_VERIFIER,
+    );
+    await zkBridge.deployed();
 
-    // console.log(`ZKBridge deployed to: ${zkBridge.address}`)
+    console.log(`ZKBridge deployed to: ${zkBridge.address}`);
 
     // const Deployer: ContractFactory = await ethers.getContractFactory("MultichainDeployer");
     // const deployer: Contract = await Deployer.deploy();
@@ -73,6 +74,12 @@ async function main() {
     // await mimc.deployTransaction.wait()
     // console.log(`Hasher deployed to ${mimc.address}`)
     // console.log(poseidonContract);
+
+    // const PMToken: ContractFactory = await ethers.getContractFactory("PMToken")
+    // const token: Contract = await PMToken.deploy("PaymentToken", "PMT")
+    // await token.deployed()
+
+    // console.log("PMToken deployed to: ", token.address)
 }
 
 // We recommend this pattern to be able to use async/await everywhere
